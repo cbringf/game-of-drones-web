@@ -1,0 +1,20 @@
+<input [(ngModel)]="rule.move" placeholder="move">
+<input [(ngModel)]="rule.kills" placeholder="kills">
+<button (click)="createRule()">Create Rule</button>
+
+<table>
+	<tr>
+		<th>Move</th>
+		<th>Action</th>
+		<th>Kills</th>
+		<th>Tools</th>
+	</tr>
+	<tr *ngFor="let r of rules | async">
+		<td>{{ r.move }}</td>
+		<td>Kills</td>
+		<td>{{ r.kills }}</td>
+		<td>
+			<button (click)="removeRule(r._id)">Remove</button>
+		</td>
+	</tr>
+</table>

@@ -1,0 +1,25 @@
+<div style="text-align:center">
+	<h1>
+	  Welcome to Game of Drones!
+	</h1>
+  </div>
+  <input [(ngModel)]="player1.name" placeholder="Player1">
+  <input [(ngModel)]="player2.name" placeholder="Player2" />
+  <button (click)="startPlay()">Start game</button>
+
+<h3>Player {{ player1.name }}</h3>
+<p>Hits {{ player1.hits }} times</p>
+
+<h3>Player {{ player2.name }}</h3>
+<p>Hits {{ player2.hits }} times</p>
+
+<h2>{{ currentPlayer?.name }}'s turn</h2>
+
+<ul>
+	<li *ngFor="let m of moves | async" (click)="selectMove(m)">
+		{{ m }}
+	</li>
+</ul>
+
+<button (click)="play()">Play</button>
+

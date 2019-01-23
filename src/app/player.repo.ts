@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
 import { FeathersService } from './feathers.service';
 import { from, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators'
+import { switchMap, map } from 'rxjs/operators'
 import { IPlayer } from './player.model';
 
 @Injectable()
 export class PlayerRepo {
-	findOrCreate(name: string, api: FeathersService) {
-		const playerService = api.getService('player');
+	playerService: any;
 
-		return from(playerService.find({
+	constructor(feathersService: FeathersService) {
+		this.playerService = feathersService.getService('player');
+	}
+
+	findOrCreate(name: string) {
+		return from(this.playerService.find({
 			query: {
 				name: name
 			}
@@ -18,14 +22,23 @@ export class PlayerRepo {
 				console.log(res);
 				if (res.total === 0) {
 					console.log('crear nuevo');
-					return from(playerService.create({ name: name }));
+					return from(this.playerService.create({ name: name, record: 0 }))
+						.pipe(map(p => {
+							p['hits'] = 0;
+							return p;
+						}));
 				}
 				else {
 					console.log('no cree');
-					return of(res.data[0]);
+					return of(res.data[0]).pipe(map(p => {
+						p['hits'] = 0;
+						return p;
+					}));
 				}
 			}));
 	}
 
-	updatePlayer(player: IPlayer) {}
+	updatePlayer(player: IPlayer) {
+		return from(this.playerService.patch(player._id, { record: player.record }));
+	}
 }

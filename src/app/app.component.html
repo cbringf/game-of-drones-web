@@ -1,10 +1,6 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to Game of Drones!
-  </h1>
-</div>
-<input [(ngModel)]="player1?.name" placeholder="Player1">
-<input [(ngModel)]="player2?.name" placeholder="Player2" />
-<button (click)="startPlay()">Start game</button>
-
+<nav>
+    <a routerLink="/play">Play</a>
+    <a routerLink="/rules">Rules</a>
+</nav>
+<router-outlet></router-outlet>
