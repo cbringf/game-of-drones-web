@@ -6,6 +6,8 @@ import { RuleRepo } from '../../repositories/rule/rule.repo';
 import { Observable } from 'rxjs';
 import { IPlayersFormResponse } from '../../repositories/_models/players-form-response.model';
 import { PlayService } from '../../services/play.service';
+import { IMatch } from 'src/app/repositories/match/match.model';
+import { MatchRepo } from 'src/app/repositories/match/match.repo';
 
 @Component({
 	selector: 'match-page',
@@ -15,72 +17,62 @@ import { PlayService } from '../../services/play.service';
 export class MatchComponent {
 	player1: IPlayer;
 	player2: IPlayer;
-	readyToStart: boolean = false;
-	moves: Observable<string[]>;
-	currentPlayer: IPlayer;
-	onPlay: boolean;
-	playFinished: boolean;
+	cursor: number = 0;
 	winner: IPlayer;
+	match: IMatch;
 
 	constructor(
-		private playerRepo: PlayerRepo,
 		private playService: PlayService,
-		private ruleRepo: RuleRepo) {
-		this.player1 = playerFactory();
-		this.player2 = playerFactory();
-		this.moves = ruleRepo.getMoves();
-		this.onPlay = false;
+		private ruleRepo: RuleRepo,
+		private playerRepo: PlayerRepo,
+		private matchRepo: MatchRepo) {
 	}
 
-	async startPlay() {
-		this.player1 = await this.playerRepo.findOrCreate(this.player1.name)
-			.toPromise();
-		this.player2 = await this.playerRepo.findOrCreate(this.player2.name)
-			.toPromise();
-		this.ruleRepo.getAllRules().subscribe(rules => {
-			this.playService.startPlay(this.player1, this.player2, rules,
-				(winner) => this.onPlayFinished(winner));
-			this.onPlay = true;
-		});
-		this.currentPlayer = this.player1;
+	get playersReady() {
+		return this.player1 && this.player2;
+	}
+
+	get currentPlayer() {
+		return this.cursor > 0 ? this.player2 : this.player1;
 	}
 
 	setPlayers(players: IPlayersFormResponse) {
-
+		this.match = players.match;
+		this.ruleRepo.getAllRules().subscribe(rules => {
+			this.player1 = players.player1;
+			this.player2 = players.player2;
+			this.playService.startPlay(this.player1, this.player2, rules,
+				(winner) => this.onPlayFinished(winner));
+		});
 	}
 
 	private onPlayFinished(winner: IPlayer) {
 		this.winner = winner;
 		this.winner.record++;
+		this.match.winner = this.winner._id;
 		this.playerRepo.updatePlayer(winner);
-		this.playFinished = true;
-		//this.reset();
-	}
-
-	reset() {
-		this.player1 = playerFactory();
-		this.player2 = playerFactory();
-		this.currentPlayer = null;
-	}
-
-	selectMove(move: string) {
-		this.currentPlayer['move'] = move;
+		this.matchRepo.updateMatch(this.match);
 	}
 
 	play() {
-		if (this.currentPlayer._id === this.player2._id) {
-			this.playService.addMove(this.player1['move'], this.player2['move']);
-			this.currentPlayer = this.player1;
+		if (this.cursor > 0) {
+			this.cursor--;
+			this.playService.addMove(this.player1.move, this.player2.move);
 		}
 		else {
-			this.currentPlayer = this.player2;
+			this.cursor++;
 		}
 	}
 
 	playAgain() {
 		this.restorePlayers();
-		this.currentPlayer = this.player1;
-		this.playFinished = false;
+		this.matchRepo.createMatch().subscribe(m=>{
+			this.match = m;
+			this.match.player1Id = this.player1._id;
+			this.match.player2Id = this.player2._id;
+			this.matchRepo.updateMatch(this.match);
+			this.winner = null;
+		});
 	}
 
 	restorePlayers() {
@@ -91,8 +83,9 @@ export class MatchComponent {
 	}
 
 	exit() {
-		this.reset();
-		this.onPlay = false;
-		this.playFinished = false;
+		this.player1 = null;
+		this.player2 = null;
+		this.match = null;
+		this.winner = null;
 	}
 }

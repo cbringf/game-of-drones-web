@@ -35,9 +35,15 @@ export class PlayersFormComponent implements OnInit {
 			.toPromise();
 		this.player2 = await this.playerRepo.findOrCreate(this.player2.name)
 			.toPromise();
-		this.onPlayersReady.emit({
-			player1: this.player1,
-			player2: this.player2
-		});
+		this.match.player1Id = this.player1._id;
+		this.match.player2Id = this.player2._id;
+		this.matchRepo.updateMatch(this.match)
+			.subscribe(() => {
+				this.onPlayersReady.emit({
+					player1: this.player1,
+					player2: this.player2,
+					match: this.match
+				});
+			});
 	}
 }

@@ -1,14 +1,21 @@
 <div class="user-form">
 	<div style="text-align:center">
-		<h1>
+		<h1 class="is-size-2">
 			Welcome to Game of Drones!
 		</h1>
 	</div>
-	<div class="field control">
-		<input [(ngModel)]="player1.name" placeholder="Player1" class="input" type="text">
+	<div class="columns">
+		<div class="column">
+			<div class="field control form-container">
+				<input [(ngModel)]="player1.name" placeholder="Player1" class="input" type="text">
+			</div>
+			<input [(ngModel)]="player2.name" placeholder="Player2" class="input" />
+			<p class='has-text-centered start-container'>
+				<button (click)="startPlay()" class="button">Start game</button>
+			</p>
+		</div>
+		<div class="column is-one-third">
+			<ngx-qrcode [qrc-value]="match?._id"></ngx-qrcode>
+		</div>
 	</div>
-	<input [(ngModel)]="player2.name" placeholder="Player2" class="input" />
-	<p class='center-btn-container'>
-		<button (click)="startPlay()" class="button">Start game</button>
-	</p>
 </div>

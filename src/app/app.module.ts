@@ -20,6 +20,8 @@ import { PlayerInfoComponent } from './components/player-info/player-info.compon
 import { PlayersFormComponent } from './components/players-form/players-form.component';
 import { MatchRepo } from './repositories/match/match.repo';
 
+import { NgxQRCodeModule } from 'ngx-qrcode2';
+
 
 library.add(fas);
 
@@ -36,7 +38,8 @@ library.add(fas);
 		BrowserModule,
 		FontAwesomeModule,
 		FormsModule,
-		AppRoutingModule
+		AppRoutingModule,
+		NgxQRCodeModule
 	],
 	providers: [
 		PlayerRepo,

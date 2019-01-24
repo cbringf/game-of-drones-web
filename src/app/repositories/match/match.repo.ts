@@ -14,4 +14,8 @@ export class MatchRepo {
 	createMatch(): Observable<IMatch> {
 		return from(this.matchService.create({}));
 	}
+
+	updateMatch(match: IMatch) {
+		return from(this.matchService.patch(match._id, match));
+	}
 }

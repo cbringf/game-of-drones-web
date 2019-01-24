@@ -11,15 +11,14 @@ export class PlayService {
 	private player1: IPlayer;
 	private player2: IPlayer;
 	private onFinishFn: (winner: IPlayer) => void;
-	private hits: number;
 	private rules: IRule[];
 
 	startPlay(player1: IPlayer, player2: IPlayer, rules: IRule[], onFinish: (winner: IPlayer) => void) {
 		this.player1 = player1;
 		this.player2 = player2;
 		this.onFinishFn = onFinish;
-		this.hits = 0;
 		this.rules = rules;
+		console.log(player1);
 	}
 
 	addMove(player1Move: string, player2Move: string) {
@@ -32,8 +31,7 @@ export class PlayService {
 
 			winner.hits++;
 
-			if (++this.hits === MAX_HITS_COUNT) {
-				this.hits = 0;
+			if (winner.hits === MAX_HITS_COUNT) {
 				this.onFinishFn(winner);
 			}
 		}

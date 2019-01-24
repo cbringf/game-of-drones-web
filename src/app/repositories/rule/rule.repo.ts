@@ -23,9 +23,6 @@ export class RuleRepo {
 	}
 
 	getAllRules(): Observable<IRule[]> {
-		// if(!this.findRulesObservable) {
-		// 	this.findRulesObservable = of(this.ruleService.find());
-		// }
 		return !this.rules ? from(this.ruleService.find({}))
 			.pipe(map((res: any) => {
 				this.rules = res.data as IRule[];
@@ -40,7 +37,7 @@ export class RuleRepo {
 
 	getMoves() {
 		if(this.rules) {
-			_.map(this.rules, r=>r.move);
+			return of(_.map(this.rules, r=>r.move));
 		}
 		else {
 			return from(this.ruleService.find({}))
