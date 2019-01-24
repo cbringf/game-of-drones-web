@@ -21,8 +21,6 @@ export class PlayService {
 		this.onFinishFn = onFinish;
 		this.hits = 0;
 		this.rules = rules;
-		console.log(player1);
-		console.log(player2);
 	}
 
 	addMove(player1Move: string, player2Move: string) {
@@ -33,11 +31,11 @@ export class PlayService {
 						r.move === player1Move && r.kills === player2Move).length > 0;
 			const winner = winnerPlayer1 ? this.player1 : this.player2;
 
+			winner.hits++;
+
 			if (++this.hits === MAX_HITS_COUNT) {
+				this.hits = 0;
 				this.onFinishFn(winner);
-			}
-			else {
-				winner.hits++;
 			}
 		}
 	}

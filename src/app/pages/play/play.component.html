@@ -1,25 +1,75 @@
-<div style="text-align:center">
-	<h1>
-	  Welcome to Game of Drones!
-	</h1>
-  </div>
-  <input [(ngModel)]="player1.name" placeholder="Player1">
-  <input [(ngModel)]="player2.name" placeholder="Player2" />
-  <button (click)="startPlay()">Start game</button>
+<div class="user-form" *ngIf="!onPlay; else playContent">
+	<div style="text-align:center">
+		<h1>
+			Welcome to Game of Drones!
+		</h1>
+	</div>
+	<div class="field control">
+		<input [(ngModel)]="player1.name" placeholder="Player1" class="input" type="text">
+	</div>
+	<input [(ngModel)]="player2.name" placeholder="Player2" class="input" />
+	<p class='center-btn-container'>
+		<button (click)="startPlay()" class="button">Start game</button>
+	</p>
+</div>
 
-<h3>Player {{ player1.name }}</h3>
-<p>Hits {{ player1.hits }} times</p>
+<ng-template #playContent>
+	<div class="columns">
+		<div class="column is-one-quarter">
+			<div class="card">
+				<div class="card-header">
+					<p class="card-header-title">
+						{{ player1.name }}
+					</p>
+				</div>
+				<div class="card-content">
+					<div class="content">
+							<p class="is-size-7">{{ player1.record }}</p>
+						<p class="is-size-1 has-text-centered">{{ player1.hits }}</p>
+					</div>
+				</div>
+			</div>
 
-<h3>Player {{ player2.name }}</h3>
-<p>Hits {{ player2.hits }} times</p>
+			<div class="card">
+				<div class="card-header">
+					<p class="card-header-title">
+						{{ player2.name }}
+					</p>
+				</div>
+				<div class="card-content">
+					<div class="content">
+						<p class="is-size-7">{{ player2.record }}</p>
+						<p class="is-size-1 has-text-centered">{{ player2.hits }}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="column">
+			<p class="is-size-2">{{ currentPlayer?.name }}'s turn</p>
 
-<h2>{{ currentPlayer?.name }}'s turn</h2>
+			<div class="field control">
+				<div class="select is-large">
+					<select [(ngModel)]="this.currentPlayer.move">
+						<option *ngFor="let m of moves | async">
+							{{ m }}
+						</option>
+					</select>
+				</div>
+			</div>
 
-<ul>
-	<li *ngFor="let m of moves | async" (click)="selectMove(m)">
-		{{ m }}
-	</li>
-</ul>
+			<button (click)="play()" class="button">Play</button>
 
-<button (click)="play()">Play</button>
-
+			<div class="card" *ngIf="playFinished">
+				<div class="card-header">
+					<p class="card-header-title has-text-success">
+						{{ winner.name }} is the winner !!!!!
+					</p>
+				</div>
+				<div class="card-content">
+					<button (click)="playAgain()" class=button>Play again!</button>
+					<button (click)="exit()" class="button">Exit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</ng-template>

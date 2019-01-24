@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { FeathersService } from '../../feathers.service';
 import { PlayerRepo } from '../../player.repo';
 import { IPlayer } from '../../player.model';
 import { PlayService } from '../../play.service';
@@ -19,34 +18,39 @@ export class PlayComponent {
 	readyToStart: boolean = false;
 	moves: Observable<string[]>;
 	currentPlayer: IPlayer;
+	onPlay: boolean;
+	playFinished: boolean;
+	winner: IPlayer;
 
 	constructor(
-		private feathers: FeathersService,
 		private playerRepo: PlayerRepo,
 		private playService: PlayService,
 		private ruleRepo: RuleRepo) {
 		this.player1 = playerFactory();
 		this.player2 = playerFactory();
 		this.moves = ruleRepo.getMoves();
+		this.onPlay = false;
 	}
 
 	async startPlay() {
-		this.player1 = await this.playerRepo.findOrCreate(this.player1.name, this.feathers)
+		this.player1 = await this.playerRepo.findOrCreate(this.player1.name)
 			.toPromise();
-		this.player2 = await this.playerRepo.findOrCreate(this.player2.name, this.feathers)
+		this.player2 = await this.playerRepo.findOrCreate(this.player2.name)
 			.toPromise();
 		this.ruleRepo.getAllRules().subscribe(rules => {
 			this.playService.startPlay(this.player1, this.player2, rules,
 				(winner) => this.onPlayFinished(winner));
+			this.onPlay = true;
 		});
 		this.currentPlayer = this.player1;
 	}
 
 	private onPlayFinished(winner: IPlayer) {
-		console.log(winner);
-		winner.record++;
+		this.winner = winner;
+		this.winner.record++;
 		this.playerRepo.updatePlayer(winner);
-		this.reset();
+		this.playFinished = true;
+		//this.reset();
 	}
 
 	reset() {
@@ -67,5 +71,24 @@ export class PlayComponent {
 		else {
 			this.currentPlayer = this.player2;
 		}
+	}
+
+	playAgain() {
+		this.restorePlayers();
+		this.currentPlayer = this.player1;
+		this.playFinished = false;
+	}
+
+	restorePlayers() {
+		this.player1.move = '';
+		this.player1.hits = 0;
+		this.player2.move = '';
+		this.player2.hits = 0;
+	}
+
+	exit() {
+		this.reset();
+		this.onPlay = false;
+		this.playFinished = false;
 	}
 }
