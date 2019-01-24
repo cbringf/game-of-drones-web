@@ -15,6 +15,10 @@ import { RuleComponent } from './pages/rules/rule.component';
 import { MatchComponent } from './pages/match/match.component';
 import { FeathersService } from './services/feathers.service';
 import { PlayService } from './services/play.service';
+import { MoveComponent } from './components/move/move.component';
+import { PlayerInfoComponent } from './components/player-info/player-info.component';
+import { PlayersFormComponent } from './components/players-form/players-form.component';
+import { MatchRepo } from './repositories/match/match.repo';
 
 
 library.add(fas);
@@ -23,7 +27,10 @@ library.add(fas);
 	declarations: [
 		AppComponent,
 		RuleComponent,
-		MatchComponent
+		MatchComponent,
+		MoveComponent,
+		PlayerInfoComponent,
+		PlayersFormComponent
 	],
 	imports: [
 		BrowserModule,
@@ -35,7 +42,8 @@ library.add(fas);
 		PlayerRepo,
 		FeathersService,
 		PlayService,
-		RuleRepo],
+		RuleRepo,
+		MatchRepo],
 	bootstrap: [AppComponent]
 })
 export class AppModule { }

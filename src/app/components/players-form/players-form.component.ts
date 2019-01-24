@@ -23,10 +23,11 @@ export class PlayersFormComponent implements OnInit {
 	) {
 		this.player1 = playerFactory();
 		this.player2 = playerFactory();
+		this.onPlayersReady = new EventEmitter();
 	}
 
 	ngOnInit() {
-		this.matchRepo.createMatch().subscribe(m=>this.match = m);
+		this.matchRepo.createMatch().subscribe(m => this.match = m);
 	}
 
 	async startPlay() {

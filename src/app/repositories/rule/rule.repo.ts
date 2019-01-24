@@ -2,8 +2,8 @@ import { Injectable } from "@angular/core";
 import { of, Observable, concat, from } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 import * as _ from 'lodash';
-import { FeathersService } from 'src/app/services/feathers.service';
 import { IRule } from './rule.model';
+import { FeathersService } from '../../services/feathers.service';
 
 @Injectable()
 export class RuleRepo {

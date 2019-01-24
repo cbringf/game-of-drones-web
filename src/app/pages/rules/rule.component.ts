@@ -6,8 +6,8 @@ import { ruleFactory } from '../../tools/factories/rule.factory';
 
 @Component({
 	selector: 'rules-page',
-	templateUrl: './rule.page.html',
-	styleUrls: ['./rule.page.css']
+	templateUrl: './rule.component.html',
+	styleUrls: ['./rule.component.css']
 })
 export class RuleComponent {
 	rules: Observable<IRule[]>;

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { RuleRepo } from 'src/app/repositories/rule.repo';
+import { RuleRepo } from 'src/app/repositories/rule/rule.repo';
 import { IPlayer } from 'src/app/repositories/player/player.model';
 import { Observable } from 'rxjs';
 import { IMove } from 'src/app/repositories/_models/move.model';
@@ -16,6 +16,7 @@ export class MoveComponent {
 
 	constructor(private ruleRepo: RuleRepo) {
 		this.moves = this.ruleRepo.getMoves();
+		this.onPlay = new EventEmitter();
 	}
 
 	play() {

@@ -4,13 +4,13 @@ import { IPlayer } from '../../repositories/player/player.model';
 import { playerFactory } from '../../tools/factories/player.factory';
 import { RuleRepo } from '../../repositories/rule/rule.repo';
 import { Observable } from 'rxjs';
-import { IPlayersFormResponse } from 'src/app/repositories/_models/players-form-response.model';
-import { PlayService } from 'src/app/services/play.service';
+import { IPlayersFormResponse } from '../../repositories/_models/players-form-response.model';
+import { PlayService } from '../../services/play.service';
 
 @Component({
 	selector: 'match-page',
-	templateUrl: './play.component.html',
-	styleUrls: ['./play.component.css']
+	templateUrl: './match.component.html',
+	styleUrls: ['./match.component.css']
 })
 export class MatchComponent {
 	player1: IPlayer;
