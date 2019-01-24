@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { FeathersService } from './feathers.service';
 import { from, of } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators'
 import { IPlayer } from './player.model';
+import { FeathersService } from 'src/app/services/feathers.service';
 
 @Injectable()
 export class PlayerRepo {

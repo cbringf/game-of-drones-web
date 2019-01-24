@@ -1,0 +1,14 @@
+<div class="user-form">
+	<div style="text-align:center">
+		<h1>
+			Welcome to Game of Drones!
+		</h1>
+	</div>
+	<div class="field control">
+		<input [(ngModel)]="player1.name" placeholder="Player1" class="input" type="text">
+	</div>
+	<input [(ngModel)]="player2.name" placeholder="Player2" class="input" />
+	<p class='center-btn-container'>
+		<button (click)="startPlay()" class="button">Start game</button>
+	</p>
+</div>

@@ -1,4 +1,4 @@
-<div class="user-form" *ngIf="!onPlay; else playContent">
+<!-- <div class="user-form" >
 	<div style="text-align:center">
 		<h1>
 			Welcome to Game of Drones!
@@ -11,12 +11,16 @@
 	<p class='center-btn-container'>
 		<button (click)="startPlay()" class="button">Start game</button>
 	</p>
-</div>
+</div> -->
+<players-form *ngIf="!onPlay; else playContent" (onPlayersReady)="setPlayers($event)">
+</players-form>
 
 <ng-template #playContent>
 	<div class="columns">
 		<div class="column is-one-quarter">
-			<div class="card">
+			<player-info [player]="player1"></player-info>
+			<player-info [player]="player2"></player-info>
+			<!-- <div class="card">
 				<div class="card-header">
 					<p class="card-header-title">
 						{{ player1.name }}
@@ -42,10 +46,11 @@
 						<p class="is-size-1 has-text-centered">{{ player2.hits }}</p>
 					</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<div class="column">
-			<p class="is-size-2">{{ currentPlayer?.name }}'s turn</p>
+			<move [player]="currentPlayer" (onPlay)="play()"></move>
+			<!-- <p class="is-size-2">{{ currentPlayer?.name }}'s turn</p>
 
 			<div class="field control">
 				<div class="select is-large">
@@ -57,7 +62,7 @@
 				</div>
 			</div>
 
-			<button (click)="play()" class="button">Play</button>
+			<button (click)="play()" class="button">Play</button> -->
 
 			<div class="card" *ngIf="playFinished">
 				<div class="card-header">

@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RulePage } from './pages/rules/rule.page';
-import { PlayComponent } from './pages/play/play.component';
+import { RuleComponent } from './pages/rules/rule.component';
+import { MatchComponent } from './pages/match/match.component';
 
 const routes: Routes = [
-    {path: '', redirectTo: '/play', pathMatch: 'full'},
-    {path: 'rules', component: RulePage},
-    {path: 'play', component: PlayComponent}
+	{ path: '', redirectTo: '/play', pathMatch: 'full' },
+	{ path: 'rules', component: RuleComponent },
+	{ path: 'play', component: MatchComponent }
 ];
 
 @NgModule({
-  declarations: [],
-  imports: [
-    RouterModule.forRoot(routes)
-  ],
-  exports: [RouterModule]
+	declarations: [],
+	imports: [
+		RouterModule.forRoot(routes)
+	],
+	exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -1,0 +1,13 @@
+<p class="is-size-2">{{ player.name }}'s turn</p>
+
+<div class="field control">
+	<div class="select is-large">
+		<select [(ngModel)]="this.player.move">
+			<option *ngFor="let m of moves | async">
+				{{ m }}
+			</option>
+		</select>
+	</div>
+</div>
+
+<button (click)="play()" class="button">Play</button>

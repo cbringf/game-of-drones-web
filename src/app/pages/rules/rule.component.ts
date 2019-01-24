@@ -1,15 +1,15 @@
 import { Component } from "@angular/core";
-import { RuleRepo } from 'src/app/rule.repo';
+import { RuleRepo } from 'src/app/repositories/rule/rule.repo';
 import { Observable } from 'rxjs';
-import { IRule } from 'src/app/rule.module';
-import { ruleFactory } from './rule.factory';
+import { IRule } from 'src/app/repositories/rule/rule.model';
+import { ruleFactory } from '../../tools/factories/rule.factory';
 
 @Component({
 	selector: 'rules-page',
 	templateUrl: './rule.page.html',
 	styleUrls: ['./rule.page.css']
 })
-export class RulePage {
+export class RuleComponent {
 	rules: Observable<IRule[]>;
 	rule: IRule;
 

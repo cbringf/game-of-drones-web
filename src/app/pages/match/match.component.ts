@@ -1,18 +1,18 @@
 import { Component } from "@angular/core";
-import { PlayerRepo } from '../../player.repo';
-import { IPlayer } from '../../player.model';
-import { PlayService } from '../../play.service';
-import { playerFactory } from '../../player.factory';
-import { RuleRepo } from '../../rule.repo';
+import { PlayerRepo } from '../../repositories/player/player.repo';
+import { IPlayer } from '../../repositories/player/player.model';
+import { playerFactory } from '../../tools/factories/player.factory';
+import { RuleRepo } from '../../repositories/rule/rule.repo';
 import { Observable } from 'rxjs';
-import { IMove } from 'src/app/move.model';
+import { IPlayersFormResponse } from 'src/app/repositories/_models/players-form-response.model';
+import { PlayService } from 'src/app/services/play.service';
 
 @Component({
-	selector: 'play-page',
+	selector: 'match-page',
 	templateUrl: './play.component.html',
 	styleUrls: ['./play.component.css']
 })
-export class PlayComponent {
+export class MatchComponent {
 	player1: IPlayer;
 	player2: IPlayer;
 	readyToStart: boolean = false;
@@ -43,6 +43,10 @@ export class PlayComponent {
 			this.onPlay = true;
 		});
 		this.currentPlayer = this.player1;
+	}
+
+	setPlayers(players: IPlayersFormResponse) {
+
 	}
 
 	private onPlayFinished(winner: IPlayer) {

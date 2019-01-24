@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { IMove } from './move.model';
 import { from, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IRule } from './rule.module';
-import { IPlayer } from './player.model';
 import * as _ from 'lodash';
-import { MAX_HITS_COUNT } from './play.config';
+import { IPlayer } from '../repositories/player/player.model';
+import { IRule } from '../repositories/rule/rule.model';
+import { MAX_HITS_COUNT } from '../play.config';
 
 @Injectable()
 export class PlayService {
