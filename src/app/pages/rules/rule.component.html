@@ -1,11 +1,13 @@
 <div class="columns">
-	<div class="column is-one-third">
+	<div class="column is-one-third rule-form">
 		<input class="input" [(ngModel)]="rule.move" placeholder="move">
 		<input class="input" [(ngModel)]="rule.kills" placeholder="kills">
-		<button class="button" (click)="createRule()">Create Rule</button>
+		<p class="has-text-centered">
+			<button class="button" (click)="createRule()" [disabled]="!ruleReady">Create Rule</button>
+		</p>
 	</div>
 	<div class="column">
-		<table class="table is-striped">
+		<table class="table is-striped rules-table">
 			<tr>
 				<th>Move</th>
 				<th>Action</th>

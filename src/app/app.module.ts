@@ -21,6 +21,7 @@ import { PlayersFormComponent } from './components/players-form/players-form.com
 import { MatchRepo } from './repositories/match/match.repo';
 
 import { NgxQRCodeModule } from 'ngx-qrcode2';
+import { ResultsComponent } from './pages/results/results.component';
 
 
 library.add(fas);
@@ -32,7 +33,8 @@ library.add(fas);
 		MatchComponent,
 		MoveComponent,
 		PlayerInfoComponent,
-		PlayersFormComponent
+		PlayersFormComponent,
+		ResultsComponent
 	],
 	imports: [
 		BrowserModule,

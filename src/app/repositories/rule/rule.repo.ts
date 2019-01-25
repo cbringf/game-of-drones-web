@@ -23,7 +23,7 @@ export class RuleRepo {
 	}
 
 	getAllRules(): Observable<IRule[]> {
-		return !this.rules ? from(this.ruleService.find({}))
+		return !this.rules ? from(this.ruleService.find({ query: { $limit: 100 } }))
 			.pipe(map((res: any) => {
 				this.rules = res.data as IRule[];
 				return this.rules;
@@ -32,19 +32,19 @@ export class RuleRepo {
 
 	removeRule(id: string) {
 		return from(this.ruleService.remove(id))
-		.pipe(map((res: any)=> _.remove(this.rules, r=>r._id === res._id)));
+			.pipe(map((res: any) => _.remove(this.rules, r => r._id === res._id)));
 	}
 
 	getMoves() {
-		if(this.rules) {
-			return of(_.map(this.rules, r=>r.move));
+		if (this.rules) {
+			return of(_.map(this.rules, r => r.move));
 		}
 		else {
 			return from(this.ruleService.find({}))
-			.pipe(map((res: any) => {
-				this.rules = res.data as IRule[];
-				return _.map(this.rules, r=> r.move);
-			}))
+				.pipe(map((res: any) => {
+					this.rules = res.data as IRule[];
+					return _.map(this.rules, r => r.move);
+				}))
 		}
 	}
 }

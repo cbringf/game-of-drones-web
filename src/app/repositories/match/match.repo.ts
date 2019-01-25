@@ -2,6 +2,8 @@ import { Observable, from } from 'rxjs';
 import { IMatch } from './match.model';
 import { Injectable } from '@angular/core';
 import { FeathersService } from 'src/app/services/feathers.service';
+import { map } from 'rxjs/operators';
+import { IMatchResponse } from './match-response.model';
 
 @Injectable()
 export class MatchRepo {
@@ -9,6 +11,11 @@ export class MatchRepo {
 
 	constructor(private feathers: FeathersService) {
 		this.matchService = feathers.getService('match');
+	}
+
+	getAllMatches() {
+		return from(this.matchService.find({ query: { $limit: 100 } }))
+			.pipe(map((res: any) => res.data as IMatchResponse[]));
 	}
 
 	createMatch(): Observable<IMatch> {

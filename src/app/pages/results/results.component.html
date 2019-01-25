@@ -1,0 +1,28 @@
+<div class="columns">
+	<div class="column is-one-third">
+		<table class="table">
+			<tr>
+				<th>Player</th>
+				<th>Record</th>
+			</tr>
+			<tr *ngFor="let p of players | async">
+				<td>{{ p.name }}</td>
+				<td>{{ p.record }}</td>
+			</tr>
+		</table>
+	</div>
+	<div class="column">
+		<table class="table is-striped">
+			<tr>
+				<th>Match</th>
+				<th>Winner</th>
+				<th>Looser</th>
+			</tr>
+			<tr *ngFor="let m of matches | async">
+				<td>{{ m._id }}</td>
+				<td>{{ m.winner?.name }}</td>
+				<td>{{ m.looser?.name }}</td>
+			</tr>
+		</table>
+	</div>
+</div>

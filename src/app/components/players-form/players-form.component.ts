@@ -26,6 +26,10 @@ export class PlayersFormComponent implements OnInit {
 		this.onPlayersReady = new EventEmitter();
 	}
 
+	get playersReady() {
+		return !!this.player1.name && !!this.player2.name;
+	}
+
 	ngOnInit() {
 		this.matchRepo.createMatch().subscribe(m => this.match = m);
 	}

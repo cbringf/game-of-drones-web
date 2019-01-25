@@ -17,6 +17,10 @@ export class RuleComponent {
 		this.reset();
 	}
 
+	get ruleReady() {
+		return !!this.rule.kills && !!this.rule.move;
+	}
+
 	private reset() {
 		this.rules = this.ruleRepo.getAllRules();
 		this.rule = ruleFactory();

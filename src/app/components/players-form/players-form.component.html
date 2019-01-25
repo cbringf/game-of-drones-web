@@ -11,7 +11,7 @@
 			</div>
 			<input [(ngModel)]="player2.name" placeholder="Player2" class="input" />
 			<p class='has-text-centered start-container'>
-				<button (click)="startPlay()" class="button">Start game</button>
+				<button (click)="startPlay()" class="button" [disabled]="!playersReady">Start game</button>
 			</p>
 		</div>
 		<div class="column is-one-third">

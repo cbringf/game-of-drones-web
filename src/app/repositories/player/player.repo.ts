@@ -12,6 +12,11 @@ export class PlayerRepo {
 		this.playerService = feathersService.getService('player');
 	}
 
+	getAllPlayers() {
+		return from(this.playerService.find({}))
+			.pipe(map((res: any) => res.data as IPlayer[]));
+	}
+
 	findOrCreate(name: string) {
 		return from(this.playerService.find({
 			query: {
@@ -19,9 +24,7 @@ export class PlayerRepo {
 			}
 		}))
 			.pipe(switchMap((res: any) => {
-				console.log(res);
 				if (res.total === 0) {
-					console.log('crear nuevo');
 					return from(this.playerService.create({ name: name, record: 0 }))
 						.pipe(map(p => {
 							p['hits'] = 0;
@@ -29,7 +32,6 @@ export class PlayerRepo {
 						}));
 				}
 				else {
-					console.log('no cree');
 					return of(res.data[0]).pipe(map(p => {
 						p['hits'] = 0;
 						return p;

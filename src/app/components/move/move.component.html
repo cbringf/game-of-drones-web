@@ -1,13 +1,17 @@
-<p class="is-size-2">{{ player.name }}'s turn</p>
-
-<div class="field control">
-	<div class="select is-large">
-		<select [(ngModel)]="this.player.move">
-			<option *ngFor="let m of moves | async">
-				{{ m }}
-			</option>
-		</select>
+<div class="card">
+	<div class="card-header">
+		<p class="is-size-2 has-text-centered">{{ player.name }}'s turn</p>
+	</div>
+	<div class="card-content">
+		<div class="field control">
+			<div class="select is-large">
+				<select [(ngModel)]="this.player.move">
+					<option *ngFor="let m of moves | async">
+						{{ m }}
+					</option>
+				</select>
+			</div>
+		</div>
+		<button (click)="play()" class="button">Play</button>
 	</div>
 </div>
-
-<button (click)="play()" class="button">Play</button>
