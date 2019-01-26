@@ -4,10 +4,11 @@ import { switchMap, map } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { IRule } from './rule.model';
 import { FeathersService } from '../../services/feathers.service';
+import { IService } from 'src/app/services/service.shape';
 
 @Injectable()
 export class RuleRepo {
-	private ruleService: any;
+	private ruleService: IService;
 	private rules: IRule[];
 
 	constructor(private feathersService: FeathersService) {

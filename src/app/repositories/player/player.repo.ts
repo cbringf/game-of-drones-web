@@ -3,10 +3,11 @@ import { from, of } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators'
 import { IPlayer } from './player.model';
 import { FeathersService } from 'src/app/services/feathers.service';
+import { IService } from 'src/app/services/service.shape';
 
 @Injectable()
 export class PlayerRepo {
-	playerService: any;
+	playerService: IService;
 
 	constructor(feathersService: FeathersService) {
 		this.playerService = feathersService.getService('player');
