@@ -19,33 +19,26 @@ export class MatchRepo {
 
 	findOpenMatch() {
 		return this.matchService.find({ query: { open: true } })
-			.pipe(map((res: any) => {
-				console.log(res);
-				return res.data as IMatchResponse[];
-			}))
-			.pipe(map(res => {
-				console.log(res);
-				return res.length > 0 ? res[0] : null;
-			}));
+			.pipe(map((res: any) => res.data as IMatchResponse[]))
+			.pipe(map(res => res.length > 0 ? res[0] : null));
 	}
 
 	getAllMatches() {
-		return from(this.matchService.find({ query: { $limit: 100 } }))
+		return from(this.matchService.find({ query: { $limit: 10000 } }))
 			.pipe(map((res: any) => res.data as IMatchResponse[]));
 	}
 
 	createMatch(data: any = {}): Observable<IMatch> {
-		console.log(data);
 		return from(this.matchService.create(data));
 	}
 
 	patchMatch(match: IMatch, fields: string[]) {
 		const data = _.pick(match, fields);
+
 		return from(this.matchService.patch(match._id, data).pipe(map(m => m as IMatch)));
 	}
 
 	subscribe(event: string) {
-		console.log(event);
 		if (!this.subscriptions[event]) {
 			this.subscriptions[event] = this.matchService.on<IMatch>(event);
 		}

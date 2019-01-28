@@ -20,7 +20,7 @@ export class PlayerRepo {
 	}
 
 	getAllPlayers() {
-		return this.playerService.find({})
+		return this.playerService.find({ query: { $limit: 10000 } })
 			.pipe(map((res: any) => res.data as IPlayer[]));
 	}
 
@@ -47,7 +47,7 @@ export class PlayerRepo {
 	}
 
 	subscribe(event: string) {
-		if(!this.subscriptions[event]) {
+		if (!this.subscriptions[event]) {
 			this.subscriptions[event] = this.playerService.on<IPlayer>(event);
 		}
 		return this.subscriptions[event];
