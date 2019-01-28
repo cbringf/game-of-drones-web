@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { of, Observable, concat, from } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
+import { of, Observable, from } from 'rxjs';
+import { map } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { IRule } from './rule.model';
 import { FeathersService } from '../../services/feathers.service';
@@ -11,7 +11,7 @@ export class RuleRepo {
 	private ruleService: IService;
 	private rules: IRule[];
 
-	constructor(private feathersService: FeathersService) {
+	constructor(feathersService: FeathersService) {
 		this.ruleService = feathersService.getService('rule');
 	}
 
@@ -38,7 +38,7 @@ export class RuleRepo {
 
 	getMoves() {
 		if (this.rules) {
-			return of(_.map(this.rules, r => r.move));
+			return of(_.map(this.rules, r => r.move)).pipe(map(r => _.uniq(r)));
 		}
 		else {
 			return from(this.ruleService.find({}))
@@ -46,6 +46,7 @@ export class RuleRepo {
 					this.rules = res.data as IRule[];
 					return _.map(this.rules, r => r.move);
 				}))
+				.pipe(map(r => _.uniq(r)));
 		}
 	}
 }

@@ -1,4 +1,4 @@
-<players-form *ngIf="!playersReady; else matchContent" (onPlayersReady)="setPlayers($event)">
+<players-form *ngIf="!playersReady; else matchContent" (onPlayersReady)="setMatch($event)">
 </players-form>
 
 <ng-template #matchContent>

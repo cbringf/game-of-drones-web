@@ -5,13 +5,28 @@ import { FeathersService } from 'src/app/services/feathers.service';
 import { map } from 'rxjs/operators';
 import { IMatchResponse } from './match-response.model';
 import { IService } from 'src/app/services/service.shape';
+import * as _ from 'lodash';
 
 @Injectable()
 export class MatchRepo {
 	private matchService: IService;
+	private subscriptions: { [key: string]: Observable<IMatch> };
 
-	constructor(private feathers: FeathersService) {
+	constructor(feathers: FeathersService) {
 		this.matchService = feathers.getService('match');
+		this.subscriptions = {};
+	}
+
+	findOpenMatch() {
+		return this.matchService.find({ query: { open: true } })
+			.pipe(map((res: any) => {
+				console.log(res);
+				return res.data as IMatchResponse[];
+			}))
+			.pipe(map(res => {
+				console.log(res);
+				return res.length > 0 ? res[0] : null;
+			}));
 	}
 
 	getAllMatches() {
@@ -19,11 +34,21 @@ export class MatchRepo {
 			.pipe(map((res: any) => res.data as IMatchResponse[]));
 	}
 
-	createMatch(): Observable<IMatch> {
-		return from(this.matchService.create({}));
+	createMatch(data: any = {}): Observable<IMatch> {
+		console.log(data);
+		return from(this.matchService.create(data));
 	}
 
-	updateMatch(match: IMatch) {
-		return from(this.matchService.patch(match._id, match));
+	patchMatch(match: IMatch, fields: string[]) {
+		const data = _.pick(match, fields);
+		return from(this.matchService.patch(match._id, data).pipe(map(m => m as IMatch)));
+	}
+
+	subscribe(event: string) {
+		console.log(event);
+		if (!this.subscriptions[event]) {
+			this.subscriptions[event] = this.matchService.on<IMatch>(event);
+		}
+		return this.subscriptions[event];
 	}
 }
