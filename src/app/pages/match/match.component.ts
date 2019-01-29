@@ -1,13 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 import { PlayerRepo } from '../../repositories/player/player.repo';
 import { IPlayer } from '../../repositories/player/player.model';
-import { playerFactory } from '../../tools/factories/player.factory';
-import { RuleRepo } from '../../repositories/rule/rule.repo';
-import { Observable } from 'rxjs';
-import { IPlayersFormResponse } from '../../repositories/_models/players-form-response.model';
-import { PlayService } from '../../services/play.service';
 import { IMatch } from 'src/app/repositories/match/match.model';
 import { MatchRepo } from 'src/app/repositories/match/match.repo';
+import * as _ from 'lodash';
 
 @Component({
 	selector: 'match-page',
@@ -15,77 +11,68 @@ import { MatchRepo } from 'src/app/repositories/match/match.repo';
 	styleUrls: ['./match.component.css']
 })
 export class MatchComponent {
-	player1: IPlayer;
-	player2: IPlayer;
-	cursor: number = 0;
-	winner: IPlayer;
+	players: IPlayer[];
 	match: IMatch;
 
 	constructor(
-		private playService: PlayService,
-		private ruleRepo: RuleRepo,
 		private playerRepo: PlayerRepo,
 		private matchRepo: MatchRepo) {
+		this.players = []
+		this.playerRepo.subscribe('patched').subscribe(p => {
+			let playerIndex = _.findIndex(this.players, localPlayer => p._id === localPlayer._id);
+
+			this.players[playerIndex] = p;
+		});
+		this.matchRepo.subscribe('patched').subscribe(m => this.match = m);
 	}
 
 	get playersReady() {
-		return this.player1 && this.player2;
+		return this.players.length > 1;
 	}
 
 	get currentPlayer() {
-		return this.cursor > 0 ? this.player2 : this.player1;
+		return this.players.filter(p => p._id === this.match.onTurn)[0];
 	}
 
-	setPlayers(players: IPlayersFormResponse) {
-		this.match = players.match;
-		this.ruleRepo.getAllRules().subscribe(rules => {
-			this.player1 = players.player1;
-			this.player2 = players.player2;
-			this.playService.startPlay(this.player1, this.player2, rules,
-				(winner) => this.onPlayFinished(winner));
-		});
+	get player1() {
+		return this.players[0];
 	}
 
-	private onPlayFinished(winner: IPlayer) {
-		this.winner = winner;
-		this.winner.record++;
-		this.match.winner = this.winner._id;
-		this.playerRepo.updatePlayer(winner);
-		this.matchRepo.updateMatch(this.match);
+	get player2() {
+		return this.players[1];
 	}
 
-	play() {
-		if (this.cursor > 0) {
-			this.cursor--;
-			this.playService.addMove(this.player1.move, this.player2.move);
+	get winner() {
+		if(!this.match.winner) {
+			return null;
 		}
-		else {
-			this.cursor++;
-		}
+		return this.players.filter(p => p._id === this.match.winner)[0];
+	}
+
+	async setMatch(match: IMatch) {
+		this.match = match;
+
+		this.players[0] = await this.playerRepo.getPlayer(match.player1Id).toPromise();
+		this.players[1] = await this.playerRepo.getPlayer(match.player2Id).toPromise();
+	}
+
+	play(move: string) {
+		let auxField = this.players[0]._id === this.match.onTurn ? 'player1' : 'player2';
+
+		this.match.moves[auxField].push(move);
+		this.matchRepo.patchMatch(this.match, ['moves', '_id']);
 	}
 
 	playAgain() {
-		this.restorePlayers();
-		this.matchRepo.createMatch().subscribe(m=>{
-			this.match = m;
-			this.match.player1Id = this.player1._id;
-			this.match.player2Id = this.player2._id;
-			this.matchRepo.updateMatch(this.match);
-			this.winner = null;
+		this.matchRepo.subscribe('created').subscribe(m => this.match = m);
+		this.matchRepo.createMatch({
+			player1Id: this.players[0]._id,
+			player2Id: this.players[1]._id
 		});
 	}
 
-	restorePlayers() {
-		this.player1.move = '';
-		this.player1.hits = 0;
-		this.player2.move = '';
-		this.player2.hits = 0;
-	}
-
 	exit() {
-		this.player1 = null;
-		this.player2 = null;
+		this.players = [];
 		this.match = null;
-		this.winner = null;
 	}
 }
