@@ -1,0 +1,33 @@
+<div class="user-form">
+	<div style="text-align:center">
+		<h1 class="is-size-2">
+			Welcome to Game of Drones!
+		</h1>
+	</div>
+	<p class="has-text-centered">
+		<button class="button" *ngIf="!match; else disabledCreateBtn" (click)="createMatch()">Create match</button>
+		<ng-template #disabledCreateBtn>
+			<button class="button" [disabled]="true">Match available</button>
+		</ng-template>
+	</p>
+	<div class="field control form-container columns">
+		<div class="column">
+			<input [(ngModel)]="player1.name" placeholder="Player1" class="input" type="text">
+		</div>
+		<div class="column is-one-fifth">
+			<button class="button" [disabled]="joinBtnDisabled(player1)" (click)="join(player1.name)">
+				Join
+			</button>
+		</div>
+	</div>
+	<div class="field control columns">
+		<div class="column">
+			<input [(ngModel)]="player2.name" placeholder="Player2" class="input" />
+		</div>
+		<div class="column is-one-fifth">
+			<button class="button" [disabled]="joinBtnDisabled(player2)" (click)="join(player2.name)">
+				Join
+			</button>
+		</div>
+	</div>
+</div>

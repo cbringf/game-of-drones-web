@@ -1,0 +1,27 @@
+<div class="columns">
+	<div class="column is-one-third rule-form">
+		<input class="input" [(ngModel)]="rule.move" placeholder="move">
+		<input class="input" [(ngModel)]="rule.kills" placeholder="kills">
+		<p class="has-text-centered">
+			<button class="button" (click)="createRule()" [disabled]="!ruleReady">Create Rule</button>
+		</p>
+	</div>
+	<div class="column">
+		<table class="table is-striped rules-table">
+			<tr>
+				<th>Move</th>
+				<th>Action</th>
+				<th>Kills</th>
+				<th>Tools</th>
+			</tr>
+			<tr *ngFor="let r of rules | async">
+				<td>{{ r.move }}</td>
+				<td>Kills</td>
+				<td>{{ r.kills }}</td>
+				<td>
+					<button class="button" (click)="removeRule(r._id)">Remove</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

@@ -1,0 +1,29 @@
+<players-form *ngIf="!playersReady; else matchContent" (onPlayersReady)="setMatch($event)">
+</players-form>
+
+<ng-template #matchContent>
+	<div class="columns">
+		<div class="column is-one-quarter">
+			<player-info [player]="player1"></player-info>
+			<player-info [player]="player2"></player-info>
+		</div>
+		<div class="column">
+			<move *ngIf="!match.winner; else winnerDialog" [player]="currentPlayer" (onPlay)="play($event)"></move>
+			<ng-template #winnerDialog>
+				<div class="card winner-dialog">
+					<div class="card-header">
+						<p class="card-header-title has-text-success is-size-2">
+							{{ winner.name }} is the winner !!!!!
+						</p>
+					</div>
+					<div class="card-content">
+						<p class="has-text-centered">
+							<button (click)="playAgain()" class="button again">Play again!</button>
+							<button (click)="exit()" class="button">Exit</button>
+						</p>
+					</div>
+				</div>
+			</ng-template>
+		</div>
+	</div>
+</ng-template>

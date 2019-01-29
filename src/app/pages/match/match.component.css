@@ -1,0 +1,17 @@
+.center-btn-container {
+	margin-top: 10px;
+	text-align: center;
+}
+
+.moves-list {
+	width: 50%;
+	margin: auto;
+}
+
+.again {
+	margin-right: 10px;
+}
+
+.winner-dialog {
+	margin-top: 5px;
+}
