@@ -1,4 +1,10 @@
-# Ngfirebase
+# game-of-drones-web
+
+This project is a Web application of the game Game of Drones. It only works with one active match (for two players).
+
+The branch v_1.0 works with the v_1.0 branch of the game-of-drones-api. In this version, the application's logic resides basically in the client side, and is for only two players in the same computer.
+
+The master branch works with the master branch version of the game-of-drones API. This version works in realtime, and can be played in diferent computers or mobile devices.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.1.
 
